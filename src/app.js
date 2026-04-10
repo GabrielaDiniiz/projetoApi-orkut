@@ -16,7 +16,6 @@ app.get("/", (req, res) => {
   res.send("<h1>Rede Social!</h1>");
 });
 
-// CADASTRO
 app.post("/usuarios", validarUsuarios, async (req, res) => {
   try {
     const { nome, email, senha } = req.body;
@@ -42,7 +41,6 @@ app.post("/usuarios", validarUsuarios, async (req, res) => {
   }
 });
 
-// GET DOS POSTS
 app.get("/posts", async (req, res) => {
   try {
     const resultado = await pool.query(`
@@ -64,7 +62,6 @@ app.get("/posts", async (req, res) => {
   }
 });
 
-// ROTA DE LOGIN
 app.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
@@ -99,7 +96,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Criando a Rota POST
 app.post("/posts", validarPost, async (req, res) => {
   try {
     const { titulo, conteudo, usuario_id } = req.body;
@@ -121,8 +117,6 @@ app.post("/posts", validarPost, async (req, res) => {
     });
   }
 });
-
-// Rota PUT - Atualização
 
 app.put("/posts/:id", auth, validarPost, async (req, res) => {
   try {
@@ -153,8 +147,6 @@ app.put("/posts/:id", auth, validarPost, async (req, res) => {
     });
   }
 });
-
-// Rota DELETE
 
 app.delete("/posts/:id", async (req, res) => {
   try {
