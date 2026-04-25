@@ -66,35 +66,29 @@ app.get("/posts", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
-  try {
-    const usuario = await pool.query(
-      `
+  const usuario = await pool.query(
+    `
       SELECT * FROM usuarios WHERE email=$1`,
-      [email],
-    );
+    [email],
+  );
 
-    if (usuarios.rows.length === 0) {
-      return res.status(400).json({
-        mensagem: "Usuário não encontrado",
-      });
-    }
-
-    if (senha !== usuario.rows[0].senha) {
-      return res.status(400).json({
-        mensagem: "Senha inválida",
-      });
-    }
-
-    const token = jwt.sign({ id: usuario.rows[0].id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.json({ token });
-  } catch (error) {
-    res.status(500).json({
-      mensagem: "Erro interno do servidor",
+  if (usuarios.rows.length === 0) {
+    return res.status(400).json({
+      mensagem: "Usuário não encontrado",
     });
   }
+
+  if (senha !== usuario.rows[0].senha) {
+    return res.status(400).json({
+      mensagem: "Senha inválida",
+    });
+  }
+
+  const token = jwt.sign({ id: usuario.rows[0].id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+
+  res.json({ token });
 });
 
 app.post("/posts", validarPost, async (req, res) => {
